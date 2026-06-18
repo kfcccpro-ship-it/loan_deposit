@@ -315,7 +315,13 @@ const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&g
 
 /* ===== 현재 문서 상태 (수신/여신 전환) ===== */
 let currentDocKey='receiving';
-let DATA, QUIZ, arts, struct, idx, cats, catCount;
+let DATA=null;
+let QUIZ=[];
+let arts=[];
+let struct=[];
+let idx=[];
+let cats=[];
+let catCount={};
 
 /* 장 아이콘 매핑 (두 문서 공통 풀) */
 const jangIcon={
@@ -364,7 +370,6 @@ function loadDoc(key){
   $('#hdTitle').textContent=DATA.title||doc.name;
   document.querySelectorAll('.doc-toggle button').forEach(b=>b.classList.toggle('on',b.dataset.doc===key));
 }
-</script>
 
 const pgBrowse=$('#pgBrowse'), pgQuiz=$('#pgQuiz'), backBtn=$('#backBtn');
 let viewState='toc'; // toc | list | search
@@ -479,7 +484,6 @@ function renderList(list,opt){
 }
 
 /* ===== 검색 ===== */
-const idx=arts.map(a=>({a,t:(a.label+' '+a.title+' '+a.body).toLowerCase()}));
 let timer;
 $('#q').addEventListener('input',e=>{
   const v=e.target.value.trim();
@@ -650,8 +654,6 @@ document.querySelectorAll('.tabbar button').forEach(b=>{
 });
 
 /* ===== OX 퀴즈 ===== */
-const cats=[...new Set(QUIZ.map(q=>q.cat))];
-const catCount={}; QUIZ.forEach(q=>catCount[q.cat]=(catCount[q.cat]||0)+1);
 let selCats=new Set(); // 비어있으면 전체
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
 let qOrder=[],qAt=0,qAns=[];
